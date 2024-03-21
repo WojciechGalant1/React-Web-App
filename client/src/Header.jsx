@@ -11,7 +11,7 @@ export default function Header() {
       <Link to={'/'} className="flex items-center gap-3">
         <img src={houseLogo} class="w-16 h-16" alt="Logo" />
         <span className="font-bold text-xl">
-          Just buy a house
+          logo
         </span>
       </Link>
 
