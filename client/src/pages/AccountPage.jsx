@@ -3,6 +3,8 @@ import { Navigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import PlacesPage from "./PlacesPage";
+
 
 
 export default function AccountPage() {
@@ -30,9 +32,11 @@ export default function AccountPage() {
     }
 
     function linkClasses (type = null) {
-        let classes = 'py-2 px-6'
+        let classes = 'py-2 px-6 rounded-full'
         if (typeof type === 'string' && type === subpage) {
-            classes += ' bg-primary text-white rounded-full';
+            classes += ' bg-primary text-white ';
+        } else {
+            classes += ' bg-gray-200 ';
         }
         return classes;
 
@@ -45,16 +49,27 @@ export default function AccountPage() {
     return (
         <div>
             <nav className="w-full flex justify-center mt-8 mb-8 gap-4">
-                <Link className={linkClasses('profile')} to={'/account'}>My profile</Link>
-                <Link className={linkClasses('bookings')} to={'/account/bookings'}>My bookings</Link>
-                <Link className={linkClasses('places')} to={'/account/places'}>My accomodations</Link>
+                <Link className={linkClasses('profile')} to={'/account'}>
+                    My profile
+                </Link>
+                <Link className={linkClasses('bookings')} to={'/account/bookings'}>
+                    My bookings
+                </Link>
+                <Link className={linkClasses('places')} to={'/account/places'}>
+                    My accomodations
+                </Link>
             </nav>
             {subpage === 'profile' && (
                 <div className="mt-5 text-center">
                     Logged in as {user.name} ({user.email})
                     <br />
-                    <button onClick={logout} className="bg-primary rounded-full px-3 py-1 text-white mt-5">Log out</button>
+                    <button onClick={logout} className="bg-primary rounded-full px-4 py-1.5 text-white mt-5">Log out</button>
 
+                </div>
+            )}
+            {subpage === 'places' && (
+                <div>
+                    <PlacesPage />
                 </div>
             )}
         </div>
