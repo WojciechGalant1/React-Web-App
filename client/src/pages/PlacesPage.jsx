@@ -48,6 +48,24 @@ export default function PlacesPage() {
         setPhotoLink('');
     }
 
+    function uploadPhoto(ev) {
+        const files = ev.target.files;
+        const data = new FormData();
+        for (let i=0; i<files.length; i++) {
+            data.append('photos', files[i]);
+        }
+
+        axios.post('/upload', data, {
+            headers: {'Content-Type':'multipart/form-data'}
+        }).then(response => {
+            const {data:filenames} = response;
+            setAddedPhotos(prev => {
+                return [...prev, ...filenames];
+            });
+        })
+
+    }
+
     return (
         <div>
             {action !== 'new' && (
@@ -75,18 +93,23 @@ export default function PlacesPage() {
                             <input value={photoLink} onChange={ev => setPhotoLink(ev.target.value)} type="text" className="custom-input" placeholder="Add using a link" />
                             <button onClick={addPhotoByLink} className="primary-btn">Add photo</button>
                         </div>
+                        
                         <div className="items-center mt-2 gap-2 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 ">
+
                             {addedPhotos.length > 0 && addedPhotos.map(link => (
-                                <div>
-                                    <img className="rounded-2xl" src={'http://localhost:4000/uploads/'+link} alt="image" />
+                                <div className="">
+                                    <img className="rounded-2xl" src={'http://localhost:4000/uploads/' + link} alt="image" />
+
                                 </div>
                             ))}
-                            <button className="shadow focus:shadow-lg flex items-center justify-center gap-1 border bg-transparent rounded-2xl p-3 text-2xl text-gray-600">
+
+                            <label className="cursor-pointer shadow focus:shadow-lg flex items-center justify-center gap-1 border bg-transparent rounded-2xl p-3 text-2xl text-gray-600">
+                                <input type="file" multiple className="hidden" onChange={uploadPhoto}/>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                 </svg>
                                 Upload
-                            </button>
+                            </label>
                         </div>
 
                         {preInput('Description','Description of the place')}
